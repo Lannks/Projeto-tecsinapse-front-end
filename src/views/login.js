@@ -1,47 +1,45 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import Card from '../components/card'
 import FormGroup from '../components/form-group'
-// import FormGroup from '../components/form-group'
-// import { withRouter } from 'react-router-dom'
 
-// import UsuarioService from '../app/service/usuarioService'
-// import LocalStorageService from '../app/service/localstorageService'
-// import { mensagemErro } from '../components/toastr'
-// import { AuthContext  } from '../main/provedorAutenticacao'
+import UsuarioService from '../app/service/usuarioService'
+import { mensagemErro } from '../components/toastr'
+import { AuthContext  } from '../main/provedorAutenticacao'
 
 class Login extends React.Component {
-
+ 
     state = {
         email: '',
         senha: ''
     }
 
-    // constructor(){
-    //     super();
-    //     this.service = new UsuarioService();
-    // }
+    constructor(){
+        super();
+        this.service = new UsuarioService();
+    }
 
-    // entrar = () => {
-    //     this.service.autenticar({
-    //         email: this.state.email,
-    //         senha: this.state.senha
-    //     }).then( response => {
-    //         this.context.iniciarSessao(response.data)
-    //         this.props.history.push('/home')
-    //     }).catch( erro => {
-    //        mensagemErro(erro.response.data)
-    //     })
-    // }
+    entrar = () => {
+        this.service.autenticar({
+            email: this.state.email,
+            senha: this.state.senha
+        }).then( response => {      
+            localStorage.setItem('user', this.state.email);
+            this.props.history.push('/lista')
+        }).catch( erro => {
+         mensagemErro(erro.response.data)
+        })
+    }
 
-    // prepareCadastrar = () => {
-    //     this.props.history.push('/cadastro-usuarios')
-    // }
+    prepareCadastrar = () => {
+        this.props.history.push('/cadastro')
+    }
 
     render() {
         return (
 
             <div className="row">
-                <div className="col-md-6" style={{ position: 'relative', left: '300px' }}>
+                <div className="col-md-6" style={{ position: 'fixed', left: '25%' }}>
                     <div className="bs-docs-section">
                         <Card title="Login">
                             <div className="row">
@@ -66,11 +64,10 @@ class Login extends React.Component {
                                                     placeholder="Password" />
                                             </FormGroup>
                                             <button onClick={this.entrar} className="btn btn-primary">
-                                                <i className="pi pi-sign-in"></i>Entrar</button>
+                                                <i className="pi"></i>Entrar</button>
                                             <button onClick={this.prepareCadastrar}
                                                 className="btn btn-success">
-                                                <i className="pi pi-plus"></i>  Cadastrar
-                                            </button>
+                                                <i className="pi "></i>Cadastrar</button>
                                         </fieldset>
                                     </div>
                                 </div>
@@ -84,6 +81,6 @@ class Login extends React.Component {
     }
 }
 
-// Login.contextType = AuthContext
+Login.contextType = AuthContext
 
-export default Login
+export default withRouter(Login)
